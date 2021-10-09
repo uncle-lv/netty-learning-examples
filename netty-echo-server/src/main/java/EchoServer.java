@@ -7,9 +7,11 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 
+@Slf4j
 public class EchoServer {
 
     private final int PORT;
@@ -42,7 +44,7 @@ public class EchoServer {
                         }
                     });
             ChannelFuture future = bootstrap.bind().sync();
-            System.out.println("EchoServer has started at " + PORT);
+            log.info("EchoServer has started at " + PORT);
             future.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully().sync();
