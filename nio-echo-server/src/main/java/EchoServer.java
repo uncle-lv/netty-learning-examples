@@ -1,3 +1,5 @@
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -9,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
 
+@Slf4j
 public class EchoServer {
 
     private final int PORT;
@@ -32,7 +35,7 @@ public class EchoServer {
             serverSocketChannel.configureBlocking(false);
             selector = Selector.open();
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-            System.out.println("EchoServer has started at port: " + PORT);
+            log.info("EchoServer has started at port: " + PORT);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -42,7 +45,7 @@ public class EchoServer {
             try {
                 selector.select();
             } catch (IOException e) {
-                System.out.println("EchoServer Exception: " + e.getMessage());
+                log.error("EchoServer Exception: " + e.getMessage());
             }
 
             Set<SelectionKey> readyKeys = selector.selectedKeys();
@@ -55,7 +58,7 @@ public class EchoServer {
                     if (key.isAcceptable()) {
                         ServerSocketChannel server = (ServerSocketChannel) key.channel();
                         SocketChannel socketChannel = server.accept();
-                        System.out.println("Receive connection from: " + socketChannel);
+                        log.info("Receive connection from: " + socketChannel);
                         socketChannel.configureBlocking(false);
                         SelectionKey selectionKey = socketChannel.register(selector, SelectionKey.OP_WRITE | SelectionKey.OP_READ);
                         ByteBuffer buffer = ByteBuffer.allocate(100);
@@ -67,7 +70,7 @@ public class EchoServer {
                         ByteBuffer output = (ByteBuffer) key.attachment();
                         client.read(output);
                         output.flip();
-                        System.out.println(client.getRemoteAddress() + " --> EchoServer: " + StandardCharsets.UTF_8.decode(output).toString());
+                        log.info(client.getRemoteAddress() + " --> EchoServer: " + StandardCharsets.UTF_8.decode(output).toString());
                         key.interestOps(SelectionKey.OP_WRITE);
                     }
 
@@ -77,7 +80,7 @@ public class EchoServer {
                         output.flip();
                         client.write(output);
                         output.flip();
-                        System.out.println("EchoServer --> " + client.getRemoteAddress() + ": " + StandardCharsets.UTF_8.decode(output).toString());
+                        log.info("EchoServer --> " + client.getRemoteAddress() + ": " + StandardCharsets.UTF_8.decode(output).toString());
                         output.compact();
                         key.interestOps(SelectionKey.OP_READ);
                     }
@@ -86,7 +89,7 @@ public class EchoServer {
                     try {
                         key.channel().close();
                     } catch (IOException ioe) {
-                        System.out.println("EchoServer Exception: " + ioe.getMessage());
+                        log.error("EchoServer Exception: " + ioe.getMessage());
                     }
                 }
             }
