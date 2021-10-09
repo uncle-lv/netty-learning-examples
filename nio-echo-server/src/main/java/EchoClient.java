@@ -34,16 +34,18 @@ public class EchoClient {
 
         try (BufferedReader stdin = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8))))) {
             String message;
-
             while ((message = stdin.readLine()) != null) {
                 writeBuffer.put(message.getBytes());
                 writeBuffer.flip();
                 writeBuffer.rewind();
                 socketChannel.write(writeBuffer);
+                writeBuffer.flip();
+                System.out.println("EchoClient --> " + socketChannel.getRemoteAddress() + ": " + StandardCharsets.UTF_8.decode(writeBuffer).toString());
                 socketChannel.read(readBuffer);
+                writeBuffer.flip();
+                System.out.println(socketChannel.getRemoteAddress() + " --> EchoClient: " + StandardCharsets.UTF_8.decode(writeBuffer).toString());
                 writeBuffer.clear();
                 readBuffer.clear();
-                System.out.println("Send message: " + message);
             }
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host, host name is: " + HOST_NAME);

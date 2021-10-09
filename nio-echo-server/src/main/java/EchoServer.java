@@ -5,12 +5,17 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
 
 public class EchoServer {
 
     private final int PORT;
+
+    public static void main(String[] args) {
+        new EchoServer(8080).run();
+    }
 
     public EchoServer(int PORT) {
         this.PORT = PORT;
@@ -61,7 +66,8 @@ public class EchoServer {
                         SocketChannel client = (SocketChannel) key.channel();
                         ByteBuffer output = (ByteBuffer) key.attachment();
                         client.read(output);
-                        System.out.println(client.getRemoteAddress() + " --> EchoServer: " + new String(output.array(), "UTF-8"));
+                        output.flip();
+                        System.out.println(client.getRemoteAddress() + " --> EchoServer: " + StandardCharsets.UTF_8.decode(output).toString());
                         key.interestOps(SelectionKey.OP_WRITE);
                     }
 
@@ -70,8 +76,8 @@ public class EchoServer {
                         ByteBuffer output = (ByteBuffer) key.attachment();
                         output.flip();
                         client.write(output);
-
-                        System.out.println("EchoServer --> " + client.getRemoteAddress() + ": " + output.toString());
+                        output.flip();
+                        System.out.println("EchoServer --> " + client.getRemoteAddress() + ": " + StandardCharsets.UTF_8.decode(output).toString());
                         output.compact();
                         key.interestOps(SelectionKey.OP_READ);
                     }
