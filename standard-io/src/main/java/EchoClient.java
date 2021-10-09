@@ -1,8 +1,11 @@
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 public class EchoClient {
 
     private final String HOST_NAME;
@@ -27,14 +30,14 @@ public class EchoClient {
             String message;
             while ((message = stdin.readLine()) != null) {
                 out.println(message);
-                System.out.println("EchoClient --> " + socket.getRemoteSocketAddress() + ": " + message);
-                System.out.println(socket.getRemoteSocketAddress() + " --> EchoClient: " + in.readLine());
+                log.info("EchoClient --> " + socket.getRemoteSocketAddress() + ": " + message);
+                log.info(socket.getRemoteSocketAddress() + " --> EchoClient: " + in.readLine());
             }
         } catch (UnknownHostException e) {
-            System.err.println("Unknown Host, host name is: " + HOST_NAME);
+            log.error("Unknown Host, host name is: " + HOST_NAME);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Failed to get I/O from host, host name is: " + HOST_NAME);
+            log.error("Failed to get I/O from host, host name is: " + HOST_NAME);
             System.exit(1);
         }
     }

@@ -1,3 +1,5 @@
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -5,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@Slf4j
 public class EchoServer {
 
     private final int PORT;
@@ -22,9 +25,9 @@ public class EchoServer {
 
         try {
             serverSocket = new ServerSocket(PORT);
-            System.out.println("EchoServer has started at port: " + PORT);
+            log.info("EchoServer has started at port: " + PORT);
         } catch (IOException e) {
-            System.out.println("Failed to start EchoServer");
+            log.error("Failed to start EchoServer");
             System.out.println(e.getMessage());
         }
 
@@ -33,15 +36,15 @@ public class EchoServer {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 ) {
-            System.out.println("Receive connection from: " + socket.getRemoteSocketAddress());
+            log.info("Receive connection from: " + socket.getRemoteSocketAddress());
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 out.println(inputLine);
-                System.out.println("EchoServer --> " + socket.getRemoteSocketAddress() + ": " + inputLine);
+                log.info("EchoServer --> " + socket.getRemoteSocketAddress() + ": " + inputLine);
             }
         } catch (IOException e) {
-            System.out.println("EchoServer Exception: " + e.getMessage());
+            log.info("EchoServer Exception: " + e.getMessage());
         }
     }
 }
