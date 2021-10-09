@@ -9,6 +9,10 @@ public class EchoServer {
 
     private final int PORT;
 
+    public static void main(String[] args) {
+        new EchoServer(8080).run();
+    }
+
     public EchoServer(int PORT) {
         this.PORT = PORT;
     }

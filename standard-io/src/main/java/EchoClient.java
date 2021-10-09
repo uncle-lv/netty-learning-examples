@@ -8,6 +8,10 @@ public class EchoClient {
     private final String HOST_NAME;
     private final int PORT;
 
+    public static void main(String[] args) {
+        new EchoClient("127.0.0.1", 8080).send("Hello");
+    }
+
     public EchoClient(String HOST_NAME, int PORT) {
         this.HOST_NAME = HOST_NAME;
         this.PORT = PORT;
@@ -23,7 +27,8 @@ public class EchoClient {
             String message;
             while ((message = stdin.readLine()) != null) {
                 out.println(message);
-                System.out.println("Send EchoServer: " + in.readLine());
+                System.out.println("EchoClient --> " + socket.getRemoteSocketAddress() + ": " + message);
+                System.out.println(socket.getRemoteSocketAddress() + " --> EchoClient: " + in.readLine());
             }
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host, host name is: " + HOST_NAME);
