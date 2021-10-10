@@ -2,7 +2,6 @@ import handler.EchoServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -44,7 +43,7 @@ public class EchoServer {
                         }
                     });
             ChannelFuture future = bootstrap.bind().sync();
-            log.info("EchoServer has started at " + PORT);
+            log.info("EchoServer has started at {}", PORT);
             future.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully().sync();

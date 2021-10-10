@@ -32,7 +32,7 @@ public class EchoClient {
             socketChannel = SocketChannel.open();
             socketChannel.connect(new InetSocketAddress(HOST_NAME, PORT));
         } catch (IOException e) {
-            log.error("EchoException: " + e.getMessage());
+            log.error("EchoException: {}", e.getMessage());
             System.exit(1);
         }
 
@@ -47,18 +47,18 @@ public class EchoClient {
                 writeBuffer.rewind();
                 socketChannel.write(writeBuffer);
                 writeBuffer.flip();
-                log.info("EchoClient --> " + socketChannel.getRemoteAddress() + ": " + StandardCharsets.UTF_8.decode(writeBuffer).toString());
+                log.info("EchoClient --> {}: {}", socketChannel.getRemoteAddress(), StandardCharsets.UTF_8.decode(writeBuffer).toString());
                 socketChannel.read(readBuffer);
                 writeBuffer.flip();
-                log.info(socketChannel.getRemoteAddress() + " --> EchoClient: " + StandardCharsets.UTF_8.decode(writeBuffer).toString());
+                log.info("{} --> EchoClient: {}", socketChannel.getRemoteAddress(), StandardCharsets.UTF_8.decode(writeBuffer).toString());
                 writeBuffer.clear();
                 readBuffer.clear();
             }
         } catch (UnknownHostException e) {
-            log.error("Unknown Host, host name is: " + HOST_NAME);
+            log.error("Unknown Host, host name is: {}", HOST_NAME);
             System.exit(1);
         } catch (IOException e) {
-            log.error("Failed to get I/O from host, host name is: " + HOST_NAME);
+            log.error("Failed to get I/O from host, host name is: {}", HOST_NAME);
             System.exit(1);
         }
     }

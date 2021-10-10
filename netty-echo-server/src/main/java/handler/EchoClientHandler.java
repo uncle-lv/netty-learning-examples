@@ -12,13 +12,13 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("EchoClient --> "+ ctx.channel().remoteAddress() + ": " + "Hello");
+        log.info("EchoClient --> {}: Hello", ctx.channel().remoteAddress());
         ctx.writeAndFlush(Unpooled.copiedBuffer("Hello", CharsetUtil.UTF_8));
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        log.info(ctx.channel().remoteAddress() + " --> EchoClient: " + ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
+        log.info("{} --> EchoClient: {}", ctx.channel().remoteAddress(), ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
     }
 
     @Override

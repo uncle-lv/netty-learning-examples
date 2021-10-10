@@ -3,6 +3,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -48,8 +49,8 @@ public class EchoServer {
                 while (socketChannel.read(buffer).get() != -1) {
                     buffer.flip();
                     socketChannel.write(buffer).get();
-
-                    System.out.println("EchoServer --> " + socketChannel.getRemoteAddress() + ": " + new String(buffer.array(), "UTF-8"));
+                    buffer.flip();
+                    System.out.println("EchoServer --> " + socketChannel.getRemoteAddress() + ": " + StandardCharsets.UTF_8.decode(buffer).toString());
 
                     if (buffer.hasRemaining()) {
                         buffer.compact();

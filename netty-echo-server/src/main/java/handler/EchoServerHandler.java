@@ -12,8 +12,9 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf bufIn = (ByteBuf) msg;
-        log.info(ctx.channel().remoteAddress() + " --> EchoServer: " + bufIn.toString(CharsetUtil.UTF_8));
+        log.info("{} --> EchoServer: {}", ctx.channel().remoteAddress(), bufIn.toString(CharsetUtil.UTF_8));
         ctx.write(bufIn);
+        log.info("EchoServer --> {}: {}", ctx.channel().remoteAddress(), bufIn.toString(CharsetUtil.UTF_8));
         ctx.flush();
     }
 

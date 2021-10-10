@@ -43,10 +43,13 @@ public class EchoClient {
                 writeBuffer.flip();
                 writeBuffer.rewind();
                 socketChannel.write(writeBuffer);
+                writeBuffer.flip();
+                System.out.println("EchoClient --> " + socketChannel.getRemoteAddress() + ": " + StandardCharsets.UTF_8.decode(writeBuffer).toString());
                 socketChannel.read(readBuffer);
+                readBuffer.flip();
+                System.out.println(socketChannel.getRemoteAddress() + " --> EchoClient: " + StandardCharsets.UTF_8.decode(writeBuffer).toString());
                 writeBuffer.clear();
                 readBuffer.clear();
-                System.out.println("Send message: " + message);
             }
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host, host name is: " + HOST_NAME);
