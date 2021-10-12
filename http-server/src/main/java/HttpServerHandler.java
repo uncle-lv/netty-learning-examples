@@ -6,6 +6,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
 
 @Slf4j
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
@@ -15,22 +18,23 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest request) throws Exception {
         this.readRequest(request);
+        log.info("{} {} {}", request.method(), request.uri(), request.protocolVersion());
 
-        String content;
+        String path;
         String uri = request.uri();
 
         switch (uri) {
             case "/":
-                content = "<h3>Netty HTTP Server</h3><p>Welcome to Index Page!</p>";
+                path = "/www/index.html";
                 break;
             case "/login":
-                content = "<h3>Netty HTTP Server</h3><p>Welcome to Login Page!</p>";
+                path = "/www/login.html";
                 break;
             default:
-                content = "<h3>404 Not Found</h3>";
+                path = "/www/404.html";
         }
 
-        this.writeResponse(channelHandlerContext, content);
+        this.writeResponse(channelHandlerContext, path);
     }
 
     private void readRequest(FullHttpRequest request) {
@@ -46,11 +50,12 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
         log.info(request.content().toString(CharsetUtil.UTF_8));
     }
 
-    private void writeResponse(ChannelHandlerContext ctx, String content) {
-        ByteBuf buf = Unpooled.copiedBuffer(content, CharsetUtil.UTF_8);
+    private void writeResponse(ChannelHandlerContext ctx, String path) throws Exception {
+        File file = new File(this.getClass().getResource(path).toURI());
+        ByteBuf buf = Unpooled.copiedBuffer(FileUtils.readFileToString(file, CharsetUtil.UTF_8), CharsetUtil.UTF_8);
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, buf);
         response.headers().set(HttpHeaderNames.CONTENT_TYPE, CONTENT_TYPE);
-        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.length());
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, file.length());
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
     }
 }
