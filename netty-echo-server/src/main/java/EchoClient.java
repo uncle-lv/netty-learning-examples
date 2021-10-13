@@ -12,7 +12,7 @@ public class EchoClient {
 
     public static void main(String[] args) {
         try {
-            new EchoClient("127.0.0.1", 8080).send();
+            new EchoClient("127.0.0.1", 8080).connect();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -23,7 +23,7 @@ public class EchoClient {
         this.PORT = PORT;
     }
 
-    public void send() throws Exception {
+    public void connect() throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
 
         try {

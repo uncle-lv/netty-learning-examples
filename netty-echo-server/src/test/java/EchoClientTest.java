@@ -4,6 +4,6 @@ public class EchoClientTest {
 
     @Test
     public void testEchoClient() throws Exception {
-        new EchoClient("127.0.0.1", 8080).send();
+        new EchoClient("127.0.0.1", 8080).connect();
     }
 }
