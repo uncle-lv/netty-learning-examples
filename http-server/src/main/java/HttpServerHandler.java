@@ -17,7 +17,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest request) throws Exception {
-        this.readRequest(request);
+        // this.readRequest(request);
         log.info("{} {} {}", request.method(), request.uri(), request.protocolVersion());
 
         String path;

@@ -1,24 +1,27 @@
-import handler.EchoClientHandler;
+import initializer.SimpleChatClientInitializer;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class EchoClient {
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class SimpleChatClient {
 
     private final String HOST_NAME;
     private final int PORT;
 
     public static void main(String[] args) {
         try {
-            new EchoClient("127.0.0.1", 8080).connect();
+            new SimpleChatClient("127.0.0.1", 8081).connect();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public EchoClient(String HOST_NAME, int PORT) {
+    public SimpleChatClient(String HOST_NAME, int PORT) {
         this.HOST_NAME = HOST_NAME;
         this.PORT = PORT;
     }
@@ -31,17 +34,13 @@ public class EchoClient {
             bootstrap.group(group)
                     .channel(NioSocketChannel.class)
                     .remoteAddress(HOST_NAME, PORT)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(
-                                    new EchoClientHandler()
-                            );
-                        }
-                    });
+                    .handler(new SimpleChatClientInitializer());
 
-            ChannelFuture future = bootstrap.connect().sync();
-            future.channel().closeFuture().sync();
+            Channel channel = bootstrap.connect().sync().channel();
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            while (true) {
+                channel.writeAndFlush(in.readLine() + "\r\n");
+            }
         } finally {
             group.shutdownGracefully().sync();
         }
