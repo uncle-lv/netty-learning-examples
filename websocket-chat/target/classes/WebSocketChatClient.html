@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket ChatRoom</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/popper.js/2.9.3/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+</head>
+
+<style>
+    #msg-div {
+        min-height: 300px;
+    }
+
+    .msg-input {
+        width: 300px;
+    }
+</style>
+
+<body>
+<div id="app" class="container">
+    <div class="row text-center m-3">
+        <div class="col"></div>
+        <div class="col">
+            <h3 class="m-3">WebSocket ChatRoom</h3>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2"></div>
+        <textarea id="msg-div" readonly="readonly"
+                  class="col-8 card shadow-sm p-3 mb-5 bg-body rounded h-50 d-inline-block">{{ content }}</textarea>
+        <div class="col-2"></div>
+    </div>
+    <div class="row m-2 text-center">
+        <form class="m-2">
+            <input v-model="msg" class="msg-input form-control d-inline" type="text" placeholder="Message...">
+            <button v-on:click="send" type="button" class="btn btn-primary d-inline">Send</button>
+        </form>
+    </div>
+
+</body>
+<script>
+    var socket;
+
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                msg: '',
+                content: '',
+            }
+        },
+
+        created: function () {
+            var _this = this;
+
+            if (!window.WebSocket) {
+                window.WebSocket = window.MozWebSocket;
+            }
+
+            if (window.WebSocket) {
+                socket = new WebSocket("ws://localhost:8081/ws");
+
+                socket.onmessage = function (event) {
+                    _this.content = _this.content + '\n' + event.data;
+                };
+
+                socket.onopen = function (event) {
+                    _this.content = 'The connection has been opened.';
+                };
+
+                socket.onclose = function (event) {
+                    _this.content = _this.content + '\n' + 'The connection has been closed.';
+                };
+            } else {
+                alert("Your browser doesn't support websocket!");
+            }
+        },
+
+        methods: {
+            send: function (msg) {
+                msg = this.msg;
+
+                if (!window.WebSocket) {
+                    return;
+                }
+
+                if (socket.readyState == WebSocket.OPEN) {
+                    socket.send(msg);
+                    this.msg = '';
+                } else {
+                    alert("The connection has been not opened.");
+                }
+            }
+        },
+    })
+</script>
+
+</html>
