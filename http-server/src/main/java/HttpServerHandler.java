@@ -18,13 +18,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest request) throws Exception {
         // this.readRequest(request);
-        log.info("{} {} {}", request.method(), request.uri(), request.protocolVersion());
+        log.info("{} - {} - {}", request.method(), request.uri(), request.protocolVersion());
 
         String path;
         String uri = request.uri();
 
         switch (uri) {
             case "/":
+            case "/index":
                 path = "/www/index.html";
                 break;
             case "/login":
