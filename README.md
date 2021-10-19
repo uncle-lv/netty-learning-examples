@@ -43,7 +43,6 @@ http://localhost:8080/index
 <div align=center><img src="https://cdn.jsdelivr.net/gh/uncle-lv/PicX-image-hosting@main/netty-learning-examples/netty_httpserver_index.4jx9bzxoit20.png" alt="class diagram"/></div>
 
 
-
 ```bash
 http://localhost:8080/login
 ```
@@ -51,7 +50,18 @@ http://localhost:8080/login
 <div align=center><img src="https://cdn.jsdelivr.net/gh/uncle-lv/PicX-image-hosting@main/netty-learning-examples/netty_httpserver_login.3ixxdzfrcxg0.png" alt="class diagram"/></div>
 
 
-
 Send request with a nonexistent URL, such as `http://localhost:8080/hello`.
 
 <div align=center><img src="https://cdn.jsdelivr.net/gh/uncle-lv/PicX-image-hosting@main/netty-learning-examples/netty_httpserver_404.13k039pgwlmo.png" alt="class diagram"/></div>
+
+## simple-chat
+
+A simple chat server demo built with netty.
+
+## websocket-chat
+
+A websocket chat server demo built with netty.
+
+Just run the server and open the WebSocketChatClient.html in the browser.
+
+<div align=center><img src="https://cdn.jsdelivr.net/gh/uncle-lv/PicX-image-hosting@main/netty-learning-examples/websocket_chat_demo.3wycwoldkb80.gif" alt="class diagram"/></div>
