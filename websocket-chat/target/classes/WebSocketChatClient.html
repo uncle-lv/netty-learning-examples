@@ -6,9 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebSocket ChatRoom</title>
+    <!-- boostrap5 -->
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/popper.js/2.9.3/umd/popper.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.min.js"></script>
+    <!-- vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 </head>
 
@@ -23,26 +25,26 @@
 </style>
 
 <body>
-<div id="app" class="container">
-    <div class="row text-center m-3">
-        <div class="col"></div>
-        <div class="col">
-            <h3 class="m-3">WebSocket ChatRoom</h3>
+    <div id="app" class="container">
+        <div class="row text-center m-3">
+            <div class="col"></div>
+            <div class="col">
+                <h3 class="m-3">WebSocket ChatRoom</h3>
+            </div>
+            <div class="col"></div>
         </div>
-        <div class="col"></div>
-    </div>
-    <div class="row m-2">
-        <div class="col-2"></div>
-        <textarea id="msg-div" readonly="readonly"
-                  class="col-8 card shadow-sm p-3 mb-5 bg-body rounded h-50 d-inline-block">{{ content }}</textarea>
-        <div class="col-2"></div>
-    </div>
-    <div class="row m-2 text-center">
-        <form class="m-2">
-            <input v-model="msg" class="msg-input form-control d-inline" type="text" placeholder="Message...">
-            <button v-on:click="send" type="button" class="btn btn-primary d-inline">Send</button>
-        </form>
-    </div>
+        <div class="row m-2">
+            <div class="col-2"></div>
+            <textarea id="msg-div" readonly="readonly"
+                class="col-8 card shadow-sm p-3 mb-5 bg-body rounded h-50 d-inline-block">{{ content }}</textarea>
+            <div class="col-2"></div>
+        </div>
+        <div class="row m-2 text-center">
+            <form class="m-2">
+                <input v-model="msg" class="msg-input form-control d-inline" type="text" placeholder="Message...">
+                <button v-on:click="send" type="button" class="btn btn-primary d-inline">Send</button>
+            </form>
+        </div>
 
 </body>
 <script>
